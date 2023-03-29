@@ -32,10 +32,26 @@ export class UsersService {
   async findAll() {
     return await this.apiModel.find().exec();
   }
-  async findById(id: string) {
-    const user = await this.apiModel.findById(id).exec();
-    return user;
+  async findById(id): Promise<UserDocument | null> {
+    const foundUser = await this.apiModel.findById(id).exec();
+    console.log('foundUSer');
+    if (foundUser) {
+      console.log('Found User: ', foundUser);
+      return foundUser;
+    } else {
+      console.log('User not found');
+      return null;
+    }
   }
+
+  async getAvatar(id: string) {
+    const user = await this.apiModel.findById(id);
+    console.log(user);
+    if (user) {
+      return user.avatar;
+    }
+  }
+
   async remove(id: string) {
     await this.apiModel
       .findByIdAndDelete(id)
